@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div class="jumbotron container-fluid">
+      <div class="center-block text-center" style="width:200px">
+      <h3>Login to Web App</h3>
+      <form enctype="multipart/form-data" method="POST" action="" class="form-group">
+        {% csrf_token %}
+        <p><input type="text" class="form-control" name="login" value="" placeholder="Username"></p>
+        <p><input type="password" class="form-control" name="password" value="" placeholder="Password"></p>
+        <p><input type="submit" class="btn btn-primary" name="commit" value="Login"></p>
+      </form>
+      </div>
+    </div>
+{% endblock %}
