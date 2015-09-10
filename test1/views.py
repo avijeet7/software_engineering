@@ -7,13 +7,13 @@ def index(request):
 
     try:
         user = request.user
-        request.session['mode'] = UserType.objects.get(id=user.id).Type
+        request.session['mode'] = UserType.objects.get(UserId_id=user.id).Type
         if request.session['mode'] == 'R':
             return redirect('/course/registrar/')
         if request.session['mode'] == 'S':
             return redirect('/course/student/')
         if request.session['mode'] == 'I':
-            return redirect('/course/instructor/')
+            return redirect('/instructor/')
     except:
         print "No login"
     

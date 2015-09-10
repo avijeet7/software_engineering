@@ -3,13 +3,34 @@
 {% block main %}
     <div class="jumbotron container-fluid">
       <div class="center-block text-center" style="width:200px">
-      <h3>Login to Web App</h3>
-      <form enctype="multipart/form-data" method="POST" action="" class="form-group">
-        {% csrf_token %}
-        <p><input type="text" class="form-control" name="login" value="" placeholder="Username"></p>
-        <p><input type="password" class="form-control" name="password" value="" placeholder="Password"></p>
-        <p><input type="submit" class="btn btn-primary" name="commit" value="Login"></p>
-      </form>
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#login">Login</a></li>
+        <li><a data-toggle="tab" href="#signup">Sign Up</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div id="login" class="tab-pane fade in active">
+          <h4>Web app Login</h4>
+          <form enctype="multipart/form-data" method="POST" action="" class="form-group">
+            {% csrf_token %}
+            <p><input type="text" class="form-control" name="login" value="" placeholder="Username"></p>
+            <p><input type="password" class="form-control" name="password" value="" placeholder="Password"></p>
+            <p><input type="submit" class="btn btn-primary" name="commit" value="Login"></p>
+          </form>
+        </div>
+        <div id="signup" class="tab-pane fade">
+          <h4>Enter user detials</h4>
+          <form enctype="multipart/form-data" method="POST" action="/login/signup/" class="form-group">
+            {% csrf_token %}
+            <p><input type="text" class="form-control" name="username" value="" placeholder="Username"></p>
+            <p><input type="password" class="form-control" name="password" value="" placeholder="Password"></p>
+            <p><input type="text" class="form-control" name="name" value="" placeholder="Name"></p>
+            <p><input type="text" class="form-control" name="email" value="" placeholder="Email"></p>
+            <p><input type="submit" class="btn btn-primary" name="commit" value="Sign Up"></p>
+          </form>
+        </div>
+      </div>
+
       </div>
     </div>
 {% endblock %}

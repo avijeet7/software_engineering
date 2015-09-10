@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class="center-block text-center" style="width:300px">
+<form enctype="multipart/form-data" method="POST" action="/instructor/" class="form-group">
+    {% csrf_token %}
+    <table class="table">
+    <tr><td>Code </td><td><input type="text" class="form-control" name="code" value="" placeholder="Code" /></td></tr>
+    <tr><td>Name </td><td><input type="text" class="form-control" name="name" value="" placeholder="Name"></td></tr>
+    <tr><td>Credits </td><td><input type="number" class="form-control" name="credits" value="" placeholder="Credits"></td></tr>
+    <tr><td>Type </td><td><input type="text" class="form-control" name="type" value="" placeholder="Type"></td></tr>
+    </table>
+    <input class="btn btn-primary" type="Submit" value="Add course">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="/login/logout/" class="btn btn-warning" name="logout">Logout</a>
+</form>
+</div>
+
+<div class="center-block text-center" style="width:800px">
+<table class="table">
+<tr style="background-color:lightgrey">
+<th>Code</th>
+<th>Course Name</th>
+<th>Instructor</th>
+<th>Credits</th>
+<th>Type</th>
+<th></th>
+</tr>
+{% for item in courses %}
+
+<tr>
+    <td>{{item.1}}</td>
+    <td>{{item.2}}</td>
+    <td>{{item.3}}</td>
+    <td>{{item.4}}</td>
+    <td>{{item.5}}</td>
+</tr>
+
+{% endfor %}
+</table>
+</div>
+
+{% endblock %}

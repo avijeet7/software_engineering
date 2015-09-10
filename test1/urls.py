@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^login/', include('authentication.urls')),
     url(r'^course/', include('course.urls')),
     url(r'^student/', include('student.urls')),
+    url(r'^instructor/', include('instructor.urls')),
 ]

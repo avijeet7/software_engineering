@@ -46,7 +46,7 @@ def view(request):
 
     courses = Catalog.objects.all().values_list('id','code','name','instructor','credits','coursetag')
 
-    return render(request, 'StudentView.html', {'user': request.user, 'data': d1, 'courses':courses})
+    return render(request, 'StudentView.html', {'user': request.user.first_name, 'data': d1, 'courses':courses})
 
 def delete(request):
     rcodelist = request.POST.getlist('code')
