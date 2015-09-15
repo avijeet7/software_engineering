@@ -9,7 +9,7 @@ def index(request):
         user = request.user
         request.session['mode'] = UserType.objects.get(UserId_id=user.id).Type
         if request.session['mode'] == 'R':
-            return redirect('/course/registrar/')
+            return redirect('/instructor/')
         if request.session['mode'] == 'S':
             return redirect('/course/student/')
         if request.session['mode'] == 'I':
