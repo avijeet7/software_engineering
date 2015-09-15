@@ -18,6 +18,3 @@ def index(request):
         print "No login"
     
     return render(request, 'welcome.html')
-
-def dummy(request):
-    return 0
