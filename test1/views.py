@@ -4,14 +4,14 @@ from django.contrib.auth import authenticate, login
 from authentication.models import UserType
 
 def index(request):
-
+    loggedin = False
     try:
         user = request.user
         request.session['mode'] = UserType.objects.get(UserId_id=user.id).Type
         if request.session['mode'] == 'R':
             loggedin = True
             return redirect('/instructor/')
-        if request.session['mode'] == 'S':
+        if request.session['mode'] == ('S' or 'P') :
             loggedin = True
             return redirect('/course/student/')
         if request.session['mode'] == 'I':
