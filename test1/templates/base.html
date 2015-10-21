@@ -21,16 +21,19 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Course Registration</title>
     <body>
-        <nav class="navbar navbar-default">
+        <nav class="navbar navbar-default" role="navigation">
           <div class="container-fluid">
             <div class="navbar-header">
               <a class="navbar-brand" href="/">Course Registration</a>
             </div>
             <div>
               <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>
-                <li><a href="/login/">Login</a></li>
-                <li><a href="/course/list/">Courses List</a></li> 
+                <li class="{% if nbar == 'home' %}active{% endif %}"><a href="/">Home</a></li>
+                <li class="{% if nbar == 'courselist' %}active{% endif %}"><a href="/course/list/">Courses List</a></li> 
+              </ul>
+              <ul class="nav navbar-nav pull-right">
+                {% if loggedin == true %}<li><a href="/login/logout/">Logout</a></li>
+                {% else %}<li><a href="/login/">Login</a></li>{% endif %}
               </ul>
             </div>
           </div>
