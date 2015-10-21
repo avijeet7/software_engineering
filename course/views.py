@@ -6,7 +6,7 @@ from forms import courseform
 
 def list(request):
     data = Catalog.objects.all().values_list('code', 'name', 'credits')
-    return render(request, 'list.html', {'data': data})
+    return render(request, 'list.html', {'data': data, 'nbar': 'courselist'})
 
 def registrar(request):
     username = request.user
