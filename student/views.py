@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-
 from student.models import StudentCourses
 from student.models import Catalog
-
 from authentication.models import UserType
+
+from django.contrib import messages
 
 import ast
 constarints = {'min-credits':12,'max-credits':30}
@@ -30,9 +30,16 @@ def homepage(request):
     return render(request, 'homepage.html', {'data': w})
 
 def view(request):
-    print request
+    total_credits_registered = 0
+    #rcodelist = request.POST.getlist('code')
+    codelist = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')
+    print codelist
+    for item in codelist:
+        total_credits_registered = total_credits_registered + Catalog.objects.get(id=item[1]).credits
+
     data = StudentCourses.objects.filter(UserId=request.user.id)
-    d1 = []
+    d1 = []    
+    codelistid = []
     for item in data:
         d = []
         d.append(item.courseid.code)
@@ -41,42 +48,49 @@ def view(request):
         d.append(item.courseid.credits)
         d.append(item.courseid.coursetag)
         d1.append(d)
-
-    courses = Catalog.objects.all().values_list('id','code','name','instructor','credits','coursetag')
+    codelist = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')
+    for item in codelist:
+        codelistid.append(int(item[1]))
+    courses = Catalog.objects.exclude(id__in = codelistid).values_list('id','code','name','instructor','credits','coursetag')
+    
+    if (total_credits_registered<constarints["min-credits"]):
+        messages.add_message(request,messages.INFO,"Minimum number of credits needed are "+str(constarints["min-credits"]),extra_tags='viewerror')
     return render(request, 'StudentView.html', {'user': request.user.first_name, 'data': d1, 'courses':courses})
 
 def delete(request):
     credits_to_delete = 0
+    success = 0
+    
     total_credits_registered = 0
     rcodelist = request.POST.getlist('code')
     codelist = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')
-
+    print codelist
     for item in codelist:
         total_credits_registered = total_credits_registered + Catalog.objects.get(id=item[1]).credits
 
     for i in rcodelist:
         credits_to_delete = credits_to_delete + Catalog.objects.get(code=i).credits
-    
-    #print total_credits_registered
-    #print credits_to_delete
-    
 
     if ((total_credits_registered-credits_to_delete)>=constarints["min-credits"]):
         for item in rcodelist:
             id1 = Catalog.objects.get(code=item).id
             obj = StudentCourses.objects.get(courseid=id1, UserId=request.user.id)
             obj.delete()
-    else:
-        print "Minimum number of credits to be registered are ",constarints["min-credits"]
-
-
+            success = 1
     
-    return redirect('/student/view/')
+    if success :
+        successmsg = "Courses deleted successfully"
+        messages.add_message(request,messages.INFO,successmsg,extra_tags='deletesuccess')
+    else:
+        errormsg = "Minimum number of credits needed are " + str(constarints["min-credits"])
+        messages.add_message(request,messages.INFO,errormsg,extra_tags='deleteerror')
+ 
+    return redirect('/student/view')
 
 def add(request):
     credits_to_add = 0
     total_credits_registered = 0
-
+    success = 0
     rcodelist = request.POST.getlist('code')
     codelist = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')
 
@@ -93,10 +107,17 @@ def add(request):
             id1 = Catalog.objects.get(id=int(item)).id
             obj = StudentCourses(courseid_id=int(id1), UserId_id=int(request.user.id))
             #print obj
+            success = 1
             obj.save()
+
+    if success :
+        successmsg = "Courses added successfully"
+        messages.add_message(request,messages.INFO,successmsg,extra_tags='addsuccess')
     else:
-        print "Maximum number of credits to be added are ",constarints["max-credits"]
-    return redirect('/student/view/', {'a': 'ffff'})
+        errormsg = "Maximum number of credits can be added are " + str(constarints["max-credits"])
+        messages.add_message(request,messages.INFO,errormsg,extra_tags='adderror')
+ 
+    return redirect('/student/view/')
 
 def req_instr_prev(request):
     userdetails = UserType.objects.get(UserId=request.user.id)

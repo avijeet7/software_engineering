@@ -18,15 +18,14 @@
 {% csrf_token %}
 <table class="table">
 <tr style="background-color:lightgrey">
+    <th></th>
     <th>Code</th>
     <th>Course Name</th>
     <th>Instructor</th>
     <th>Credits</th>
     <th>Type</th>
-    <th></th>
 </tr>
 {% for item in data %}
-
 <tr>
     <td><input type="checkbox" name="code" value="{{item.0}}" /></td>
     <td>{{item.0}}</td>
@@ -35,9 +34,29 @@
     <td>{{item.3}}</td>
     <td>{{item.4}}</td>
 </tr>
-
 {% endfor %}
+
+{% if messages %}
+<tr>
+    <div class="container">
+    <div class='col-sm-8' >
+        {% for message in messages %}
+            <p {% if "deletesuccess" in message.tags %} class="alert alert-info"  {% elif "deleteerror" in message.tags %} class="alert alert-danger"{% elif "viewerror" in message.tags %} class="alert alert-danger" {%endif%}> 
+                {% if "deletesuccess" in message.tags or "deleteerror" in message.tags%}
+                    {{message}}
+                {% endif%}
+                {% if "viewerror" in message.tags%}
+                    {{message}}
+                {%endif%}
+            </p>
+        {% endfor %}
+    </div>
+</div>
+</tr>
+{% endif %}
+
 </table>
+
 <input class="btn btn-danger" type="Submit" value="Drop course">
 </form>
 </div>
@@ -50,12 +69,12 @@
 {% csrf_token %}
 <table class="table">
 <tr style="background-color:lightgrey">
+<th></th>
 <th>Code</th>
 <th>Course Name</th>
 <th>Instructor</th>
 <th>Credits</th>
 <th>Type</th>
-<th></th>
 </tr>
 {% for item in courses %}
 
@@ -67,8 +86,25 @@
     <td>{{item.4}}</td>
     <td>{{item.5}}</td>
 </tr>
-
 {% endfor %}
+
+
+{% if messages %}
+<tr>
+    <div class="container">
+    <div class='col-sm-8' >
+        {% for message in messages %}
+            <p {% if "addsuccess" in message.tags %} class="alert alert-info" {% elif "adderror" in message.tags %} class="alert alert-danger"{% endif %}> 
+                {% if "addsuccess" in message.tags or "adderror" in message.tags%}
+                {{message}}
+                {%endif%}
+            </p>
+        {% endfor %}
+    </div>
+</div>
+</tr>
+{% endif %}
+
 </table>
 <input class="btn btn-primary" type="Submit" value="Add course">
 </form>
