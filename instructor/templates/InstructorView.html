@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
 {% block main %}
-
+ <div class="container-fluid">
+      <div class="center-block" style="width:800px">
+        <a href="/login/logout/" class="btn btn-warning pull-right hide" name="logout">Logout</a>
+        <h3>Welcome Prof. {{user}}</h3>
+      </div>
+    </div>
 <div class="center-block text-center" style="width:300px">
 <form enctype="multipart/form-data" method="POST" action="/instructor/" class="form-group">
     {% csrf_token %}
@@ -12,12 +17,15 @@
     <tr><td>Type </td><td><input type="text" class="form-control" name="type" value="" placeholder="Type"></td></tr>
     </table>
     <input class="btn btn-primary" type="Submit" value="Add course">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        
-    <a href="/login/logout/" class="btn btn-warning" name="logout">Logout</a>
 </form>
 </div>
 
-<div class="center-block text-center" style="width:800px">
+<div class="center-block text-center" style="width:900px">
+<div class="alert alert-success" role="alert">
+<h3>Courses offered by you in current semester</h3>
+</div>
+</div>
+<div class="center-block text-center" style="width:900px">
 <table class="table">
 <tr style="background-color:lightgrey">
 <th>Code</th>
@@ -25,20 +33,48 @@
 <th>Instructor</th>
 <th>Credits</th>
 <th>Type</th>
-<th></th>
+<th>Pre-requisite</th>
 </tr>
 {% for item in courses %}
-
 <tr>
     <td>{{item.1}}</td>
     <td>{{item.2}}</td>
     <td>{{item.3}}</td>
     <td>{{item.4}}</td>
     <td>{{item.5}}</td>
+    <td>{{item.6}}</td>
 </tr>
-
 {% endfor %}
 </table>
 </div>
 
+{% for course in studentlist %}
+<div class="center-block text-center" style="width:900px">
+<div class="alert alert-success" role="alert">
+<h3>Student who have taken course {{course.0}} in current semester</h3>
+</div>
+</div>
+
+<div class="center-block text-center" style="width:900px">
+<table class="table">
+<tr style="background-color:lightgrey">
+<th>Id</th>
+<th>Username</th>
+<th>Full Name</th>
+<th>Email</th>
+</tr>
+{% for item in course.1 %}
+<tr>
+    <td>{{item.0}}</td>
+    <td>{{item.1}}</td>
+    <td>{{item.2}}</td>
+    <td>{{item.3}}</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+
+
+{% endfor %}
 {% endblock %}

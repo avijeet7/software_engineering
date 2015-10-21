@@ -30,6 +30,9 @@ def homepage(request):
     return render(request, 'homepage.html', {'data': w})
 
 def view(request):
+    
+    #x = Catalog.objects.filter(id__in = [1]).values_list('id','code','name','instructor','credits','coursetag','prereq')
+    #print x
     total_credits_registered = 0
     #rcodelist = request.POST.getlist('code')
     codelist = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')

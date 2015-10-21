@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'authentication',
     'student',
     'instructor',
+    #'south'
 )
 
 MIDDLEWARE_CLASSES = (
