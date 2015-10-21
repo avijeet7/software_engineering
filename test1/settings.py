@@ -88,9 +88,9 @@ WSGI_APPLICATION = 'test1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'seproj',
+        'NAME': 'seproj2',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'imran',
         'HOST': 'localhost',
         'PORT': '80',
     }

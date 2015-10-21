@@ -17,6 +17,8 @@ def auth_login(request):
                     return redirect('/course/student/')
                 if request.session['mode'] == 'I':
                     return redirect('/instructor/')
+                if request.session['mode'] == 'P':
+                    return redirect('/course/student/')
 
             else:
                 print("The password is valid, but the account has been disabled!")

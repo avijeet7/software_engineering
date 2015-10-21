@@ -6,6 +6,7 @@
       <div class="center-block" style="width:800px">
         <a href="/login/logout/" class="btn btn-warning pull-right" name="logout">Logout</a>
         <h3>Welcome {{user}}</h3>
+         <a href="/student/req_prev/" class="btn btn-primary pull-right" name="req_inst_prev">Request Instructor priveledges</a>
       </div>
     </div>
 
@@ -17,12 +18,12 @@
 {% csrf_token %}
 <table class="table">
 <tr style="background-color:lightgrey">
-<th>Code</th>
-<th>Course Name</th>
-<th>Instructor</th>
-<th>Credits</th>
-<th>Type</th>
-<th></th>
+    <th>Code</th>
+    <th>Course Name</th>
+    <th>Instructor</th>
+    <th>Credits</th>
+    <th>Type</th>
+    <th></th>
 </tr>
 {% for item in data %}
 
