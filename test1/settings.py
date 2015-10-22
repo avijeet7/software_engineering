@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'authentication',
     'student',
     'instructor',
+    'registrar',
     #'south'
 )
 
@@ -89,9 +90,9 @@ WSGI_APPLICATION = 'test1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'seproj2',
+        'NAME': 'seproj',
         'USER': 'root',
-        'PASSWORD': 'imran',
+        'PASSWORD': 'root123',
         'HOST': 'localhost',
         'PORT': '80',
     }

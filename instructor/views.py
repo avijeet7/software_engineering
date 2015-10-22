@@ -36,4 +36,4 @@ def index(request):
         
         studentlist.append([str(code[0][0]),studentlistinfo])
     #print studentlist
-    return render(request, 'InstructorView.html', {'user': request.user, 'courses':coursesoffered,'studentlist':studentlist})
+    return render(request, 'InstructorView.html', {'user': request.user.first_name, 'courses':coursesoffered,'studentlist':studentlist})

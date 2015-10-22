@@ -11,14 +11,13 @@ def auth_login(request):
             if user.is_active:
                 login(request, user)
                 request.session['mode'] = UserType.objects.get(UserId_id=user.id).Type
+                print request.session['mode']
                 if request.session['mode'] == 'R':
-                    return redirect('/course/registrar/')
-                if request.session['mode'] == 'S':
-                    return redirect('/course/student/')
+                    return redirect('/registrar/')
+                if (request.session['mode'] == 'S') or (request.session['mode'] == 'P'):
+                    return redirect('/student/')
                 if request.session['mode'] == 'I':
                     return redirect('/instructor/')
-                if request.session['mode'] == 'P':
-                    return redirect('/course/student/')
 
             else:
                 print("The password is valid, but the account has been disabled!")

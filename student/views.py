@@ -8,26 +8,26 @@ from django.contrib import messages
 import ast
 constarints = {'min-credits':12,'max-credits':30}
 
-def homepage(request):
-    print request.user.id
+# def homepage(request):
+#     print request.user.id
 
-    d = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')
-    print d
-    c = Catalog.objects.all().values_list('id','coursecode','coursename','instructor','coursecredits','coursetag')
+#     d = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')
+#     print d
+#     c = Catalog.objects.all().values_list('id','code','coursename','instructor','coursecredits','coursetag')
     
 
-    rollnoid=request.user.id #give rollno here
-    z=[]
-    for item in d:
-        if item[0]==rollnoid:
-            z.append(item[1])
-    w=[]
-    for id1 in z:
-        for item1 in c:
-            if (item1[0]==id1):
-                w.append(item1[1:])
+#     rollnoid=request.user.id #give rollno here
+#     z=[]
+#     for item in d:
+#         if item[0]==rollnoid:
+#             z.append(item[1])
+#     w=[]
+#     for id1 in z:
+#         for item1 in c:
+#             if (item1[0]==id1):
+#                 w.append(item1[1:])
 
-    return render(request, 'homepage.html', {'data': w})
+#     return render(request, 'homepage.html', {'data': w})
 
 def view(request):
     
@@ -88,7 +88,7 @@ def delete(request):
         errormsg = "Minimum number of credits needed are " + str(constarints["min-credits"])
         messages.add_message(request,messages.INFO,errormsg,extra_tags='deleteerror')
  
-    return redirect('/student/view')
+    return redirect('/student/')
 
 def add(request):
     credits_to_add = 0
@@ -120,10 +120,10 @@ def add(request):
         errormsg = "Maximum number of credits can be added are " + str(constarints["max-credits"])
         messages.add_message(request,messages.INFO,errormsg,extra_tags='adderror')
  
-    return redirect('/student/view/')
+    return redirect('/student/')
 
 def req_instr_prev(request):
     userdetails = UserType.objects.get(UserId=request.user.id)
     userdetails.Type = "P"
     userdetails.save()
-    return redirect('/student/view/')
+    return redirect('/student/')

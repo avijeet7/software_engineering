@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="center-block text-center" style="width:800px">
+	<div class="alert alert-success" role="alert">
+	<h3>Pending requests to become instrcutor</h3>
+	</div>
+	<form method="POST" action="/registrar/add_inst/">
+	{% csrf_token %}
+		<table class="table">
+			<tr style="background-color:lightgrey">
+				<th></th>
+    			<th>Id</th>
+    			<th>User Name</th>
+    			<th>Full name</th>
+    			<th>Email</th>
+			</tr>
+			{% for item in pending_user %}
+				{% for col in item %}
+				<tr>
+    				<td><input type="checkbox" name="inst_req" value="{{col.0}}" /></td>
+    				<td>{{col.0}}</td>
+    				<td>{{col.1}}</td>
+    				<td>{{col.2}}</td>
+    				<td>{{col.3}}</td>
+				</tr>
+				{% endfor %}
+			{% endfor %}
+		</table>
+		<input class="btn btn-danger" type="Submit" value="Approve">
+	</form>
+</div>
+{% endblock%}

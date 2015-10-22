@@ -8,12 +8,13 @@ def index(request):
     try:
         user = request.user
         request.session['mode'] = UserType.objects.get(UserId_id=user.id).Type
+        print "asd"
         if request.session['mode'] == 'R':
             loggedin = True
-            return redirect('/instructor/')
-        if request.session['mode'] == ('S' or 'P') :
+            return redirect('/registrar/')
+        if (request.session['mode'] == 'S') or (request.session['mode'] == 'P'):
             loggedin = True
-            return redirect('/course/student/')
+            return redirect('/student/')
         if request.session['mode'] == 'I':
             loggedin = True
             return redirect('/instructor/')
