@@ -51,7 +51,7 @@
 {% for course in studentlist %}
 <div class="center-block text-center" style="width:900px">
 <div class="alert alert-info" role="alert">
-<h3>Student who have registered for course {{course.0}} in current semester</h3>
+<h3>Student who have registered for course {{course.0}} in current semester(Confirmed list)</h3>
 </div>
 </div>
 
@@ -74,6 +74,29 @@
 </table>
 </div>
 
+<div class="center-block text-center" style="width:900px">
+<div class="alert alert-info" role="alert">
+<h3>Student who have registered for course {{course.0}} in current semester(Waiting list)</h3>
+</div>
+</div>
+<div class="center-block text-center" style="width:900px">
+<table class="table">
+<tr style="background-color:lightgrey">
+<th>Id</th>
+<th>Username</th>
+<th>Full Name</th>
+<th>Email</th>
+</tr>
+{% for item in course.2 %}
+<tr>
+    <td>{{item.0}}</td>
+    <td>{{item.1}}</td>
+    <td>{{item.2}}</td>
+    <td>{{item.3}}</td>
+</tr>
+{% endfor %}
+</table>
+</div>
 
 
 {% endfor %}

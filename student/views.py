@@ -6,37 +6,12 @@ from authentication.models import UserType
 from django.contrib import messages
 
 import ast
-constarints = {'min-credits':12,'max-credits':30}
-
-# def homepage(request):
-#     print request.user.id
-
-#     d = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')
-#     print d
-#     c = Catalog.objects.all().values_list('id','code','coursename','instructor','coursecredits','coursetag')
-    
-
-#     rollnoid=request.user.id #give rollno here
-#     z=[]
-#     for item in d:
-#         if item[0]==rollnoid:
-#             z.append(item[1])
-#     w=[]
-#     for id1 in z:
-#         for item1 in c:
-#             if (item1[0]==id1):
-#                 w.append(item1[1:])
-
-#     return render(request, 'homepage.html', {'data': w})
+constarints = {'min-credits':12,'max-credits':30,'max-enroll-inst':3,'max-enroll-reg':10}
 
 def view(request):
     
-    #x = Catalog.objects.filter(id__in = [1]).values_list('id','code','name','instructor','credits','coursetag','prereq')
-    #print x
     total_credits_registered = 0
-    #rcodelist = request.POST.getlist('code')
     codelist = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')
-    print codelist
     for item in codelist:
         total_credits_registered = total_credits_registered + Catalog.objects.get(id=item[1]).credits
 
@@ -64,11 +39,12 @@ def view(request):
 def delete(request):
     credits_to_delete = 0
     success = 0
-    
     total_credits_registered = 0
+    enroll_limit_status_reg = ""
+    enroll_limit_status_inst = ""
+
     rcodelist = request.POST.getlist('code')
     codelist = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')
-    print codelist
     for item in codelist:
         total_credits_registered = total_credits_registered + Catalog.objects.get(id=item[1]).credits
 
@@ -78,6 +54,17 @@ def delete(request):
     if ((total_credits_registered-credits_to_delete)>=constarints["min-credits"]):
         for item in rcodelist:
             id1 = Catalog.objects.get(code=item).id
+
+
+            number_of_course_reg = StudentCourses.objects.filter(courseid_id=id1).count()
+            myobj = StudentCourses.objects.filter(UserId=request.user.id,courseid_id=id1).values_list('UserId','courseid','enroll_limit_status_inst','enroll_limit_status_reg')
+            if str(myobj[0][2]) == "C":
+                #code for confirming next student from waitlist
+                print "before modifying" , myobj
+                list_of_waiting_students = StudentCourses.objects.filter(courseid_id=id1,enroll_limit_status_inst="W")[:1].get()
+                list_of_waiting_students.enroll_limit_status_inst = "C"
+                list_of_waiting_students.save()
+                
             obj = StudentCourses.objects.get(courseid=id1, UserId=request.user.id)
             obj.delete()
             success = 1
@@ -92,9 +79,13 @@ def delete(request):
     return redirect('/student/')
 
 def add(request):
+
     credits_to_add = 0
     total_credits_registered = 0
     success = 0
+    enroll_limit_status_reg = ""
+    enroll_limit_status_inst = ""
+            
     rcodelist = request.POST.getlist('code')
     codelist = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')
 
@@ -103,14 +94,24 @@ def add(request):
     for i in rcodelist:
         credits_to_add = credits_to_add + Catalog.objects.get(id=int(i)).credits
     
-    #print total_credits_registered
-    #print credits_to_add
-
     if ((total_credits_registered+credits_to_add)<=constarints["max-credits"]):
         for item in rcodelist:
             id1 = Catalog.objects.get(id=int(item)).id
-            obj = StudentCourses(courseid_id=int(id1), UserId_id=int(request.user.id))
-            #print obj
+            
+            number_of_course_reg = StudentCourses.objects.filter(courseid_id=id1).count()
+            z = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId','courseid','enroll_limit_status_inst','enroll_limit_status_reg')
+
+            if number_of_course_reg >= constarints["max-enroll-reg"]:
+                enroll_limit_status_reg = "NA"
+            else:  
+                enroll_limit_status_reg = "A"
+
+            if number_of_course_reg >= constarints["max-enroll-inst"]:
+                enroll_limit_status_inst = "W"
+            else:
+                enroll_limit_status_inst = "C"
+            
+            obj = StudentCourses(UserId_id=int(request.user.id),courseid_id=int(id1),enroll_limit_status_inst=enroll_limit_status_inst,enroll_limit_status_reg=enroll_limit_status_reg)
             success = 1
             obj.save()
 

@@ -26,14 +26,21 @@ def index(request):
             coursesoffered.append(z)
     studentlist = []
     for course in coursesoffered:
-        tempstudentlist = StudentCourses.objects.filter(courseid = course[0]).values_list('UserId')
-        tempstudentlist = [ int(x[0]) for x in tempstudentlist ]
+        waiting_students = StudentCourses.objects.filter(courseid = course[0],enroll_limit_status_inst="W").values_list('UserId')
+        waiting_students = [ int(x[0]) for x in waiting_students ]
+        confirmed_students = StudentCourses.objects.filter(courseid = course[0],enroll_limit_status_inst="C").values_list('UserId')
+        confirmed_students = [ int(x[0]) for x in confirmed_students ]
+        
         code = Catalog.objects.filter(id = course[0]).values_list('code')
+
+        waiting_studentinfo = []
+        for studentid in waiting_students:
+            waiting_studentinfo.append(User.objects.filter(id = studentid).values_list('id','username','first_name','email')[0])
+
+        confirmed_studentinfo = []
+        for studentid in confirmed_students:
+            confirmed_studentinfo.append(User.objects.filter(id = studentid).values_list('id','username','first_name','email')[0])
         
-        studentlistinfo = []
-        for studentid in tempstudentlist:
-            studentlistinfo.append(User.objects.filter(id = studentid).values_list('id','username','first_name','email')[0])
-        
-        studentlist.append([str(code[0][0]),studentlistinfo])
-    #print studentlist
+        studentlist.append([str(code[0][0]),confirmed_studentinfo,waiting_studentinfo])
+        print studentlist
     return render(request, 'InstructorView.html', {'user': request.user.first_name, 'courses':coursesoffered,'studentlist':studentlist})
