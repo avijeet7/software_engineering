@@ -58,7 +58,8 @@ def view(request):
     
     if (total_credits_registered<constarints["min-credits"]):
         messages.add_message(request,messages.INFO,"Minimum number of credits needed are "+str(constarints["min-credits"]),extra_tags='viewerror')
-    return render(request, 'StudentView.html', {'user': request.user.first_name, 'data': d1, 'courses':courses})
+
+    return render(request, 'StudentView.html', {'user': request.user.first_name, 'data': d1, 'courses':courses, 'mode': request.session['mode']})
 
 def delete(request):
     credits_to_delete = 0
@@ -87,7 +88,7 @@ def delete(request):
     else:
         errormsg = "Minimum number of credits needed are " + str(constarints["min-credits"])
         messages.add_message(request,messages.INFO,errormsg,extra_tags='deleteerror')
- 
+
     return redirect('/student/')
 
 def add(request):
@@ -126,4 +127,12 @@ def req_instr_prev(request):
     userdetails = UserType.objects.get(UserId=request.user.id)
     userdetails.Type = "P"
     userdetails.save()
+    request.session['mode'] = 'P'
+    return redirect('/student/')
+
+def can_req_prev(request):
+    userdetails = UserType.objects.get(UserId=request.user.id)
+    userdetails.Type = "S"
+    userdetails.save()
+    request.session['mode'] = 'S'
     return redirect('/student/')
