@@ -7,7 +7,7 @@
         <h3>Welcome Prof. {{user}}</h3>
       </div>
     </div>
-<div class="center-block text-center" style="width:300px">
+<div class="center-block text-center" style="width:400px">
 <form enctype="multipart/form-data" method="POST" action="/instructor/" class="form-group">
     {% csrf_token %}
     <table class="table">
@@ -15,6 +15,7 @@
     <tr><td>Name </td><td><input type="text" class="form-control" name="name" value="" placeholder="Name"></td></tr>
     <tr><td>Credits </td><td><input type="number" class="form-control" name="credits" value="" placeholder="Credits"></td></tr>
     <tr><td>Type </td><td><input type="text" class="form-control" name="type" value="" placeholder="Type"></td></tr>
+    <tr><td>Max enroll limit </td><td><input type="number" class="form-control" name="max_enroll_limit" value="0" placeholder="Max limit"></td></tr>
     </table>
     <input class="btn btn-primary" type="Submit" value="Add course">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </form>
@@ -36,6 +37,7 @@
 <th>Pre-requisite</th>
 </tr>
 {% for item in courses %}
+
 <tr>
     <td>{{item.1}}</td>
     <td>{{item.2}}</td>
@@ -58,14 +60,15 @@
 <div class="center-block text-center" style="width:900px">
 <table class="table">
 <tr style="background-color:lightgrey">
-<th>Id</th>
+<th>Sr. no.</th>
 <th>Username</th>
 <th>Full Name</th>
 <th>Email</th>
 </tr>
+
 {% for item in course.1 %}
 <tr>
-    <td>{{item.0}}</td>
+    <td>{{forloop.counter}}</td>
     <td>{{item.1}}</td>
     <td>{{item.2}}</td>
     <td>{{item.3}}</td>
@@ -82,14 +85,14 @@
 <div class="center-block text-center" style="width:900px">
 <table class="table">
 <tr style="background-color:lightgrey">
-<th>Id</th>
+<th>Sr. no.</th>
 <th>Username</th>
 <th>Full Name</th>
 <th>Email</th>
 </tr>
 {% for item in course.2 %}
 <tr>
-    <td>{{item.0}}</td>
+    <td>{{forloop.counter}}</td>
     <td>{{item.1}}</td>
     <td>{{item.2}}</td>
     <td>{{item.3}}</td>

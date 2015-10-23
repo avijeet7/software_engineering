@@ -2,7 +2,8 @@ from django.shortcuts import render
 from student.models import StudentCourses
 from course.models import Catalog
 from django.contrib.auth.models import User
-
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 def index(request):
 
     if request.method == 'POST':
@@ -11,9 +12,11 @@ def index(request):
         instructor = request.user.first_name
         credits = request.POST['credits']
         coursetag = request.POST['type']
+        max_enroll_limit = request.POST['max_enroll_limit']
 
-        course = Catalog(code=code, name=name, instructor=instructor, credits=credits, coursetag=coursetag)
+        course = Catalog(code=code, name=name, instructor=instructor, credits=credits, coursetag=coursetag,max_enroll_limit=max_enroll_limit)
         course.save()
+        return HttpResponseRedirect(reverse("instructor.views.index"))
 
     courses = Catalog.objects.filter(instructor = request.user.first_name).values_list('id','code','name','instructor','credits','coursetag','prereq')
     coursesoffered = []
