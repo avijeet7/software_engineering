@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'student',
     'instructor',
     'registrar',
+    'history',
     #'south'
 )
 
@@ -93,7 +94,7 @@ DATABASES = {
         'NAME': 'seproj2',
         #'NAME': 'test-pp',
         'USER': 'root',
-        'PASSWORD': 'imran',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '80',
     }
