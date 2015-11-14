@@ -2,9 +2,8 @@
 
 {% block main %}
 <div class="center-block text-center" style="width:800px">
-	<div class="alert alert-success" role="alert">
+	<div class="alert alert-info" role="alert">
 	<h3>Pending requests to become instructor</h3>
-	</div>
 	<form method="POST" action="/registrar/add_inst/">
 	{% csrf_token %}
 		<table class="table">
@@ -29,5 +28,8 @@
 		</table>
 		<input class="btn btn-danger" type="Submit" value="Approve">
 	</form>
+    </div>
+    <div class="alert alert-success" role="alert">
+    <h3>View student's info and history{{' '}}<a class="btn btn-primary" href="/history/">Click here</a></h3>
 </div>
 {% endblock%}

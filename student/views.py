@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from student.models import StudentCourses
+from student.models import StudentCourses, Student
 from course.models import Catalog, Prerequisites
 from authentication.models import UserType
 from registrar.models import Constraints
 from django.contrib import messages
+from history.models import StudentCourseHistory
 
 import ast
 #constarints = {'min-credits':12,'max-credits':30,'max-enroll-inst':3,'max-enroll-reg':10}
@@ -89,6 +90,28 @@ def delete(request):
 
 def add(request):
 
+    rcodelist = request.POST.getlist('code')
+
+    """Check Prerequisites are met or not"""
+    stu_courses = StudentCourseHistory.objects.filter(user=request.user.id).values_list('course', flat=True)
+    for item in rcodelist:
+        course_prereq = Prerequisites.objects.filter(cid=item).values_list('prereq', flat=True)
+        print course_prereq , " :: " , stu_courses
+        c = 0
+        for i in course_prereq:
+            if i in stu_courses:
+                c += 1
+        if c == len(course_prereq):
+            """Prerequisites satisfied, add the course"""
+            add_the_course(request, [item])
+        else:
+            """Course not added"""
+            errormsg = "Course prerequisites not satisfied"
+            messages.add_message(request,messages.INFO,errormsg,extra_tags='adderror')
+
+    return redirect('/student/')
+
+def add_the_course(request, code):
     credits_to_add = 0
     total_credits_registered = 0
     success = 0
@@ -97,7 +120,7 @@ def add(request):
     max_enroll_reg = 0 
     max_enroll_inst = 0
 
-    rcodelist = request.POST.getlist('code')
+    rcodelist = code
     codelist = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')
 
     for item in codelist:
@@ -135,8 +158,6 @@ def add(request):
     else:
         errormsg = "Maximum number of credits can be added are " + str(max_credits)
         messages.add_message(request,messages.INFO,errormsg,extra_tags='adderror')
- 
-    return redirect('/student/')
 
 def req_instr_prev(request):
     userdetails = UserType.objects.get(UserId=request.user.id)
@@ -151,3 +172,23 @@ def can_req_prev(request):
     userdetails.save()
     request.session['mode'] = 'S'
     return redirect('/student/')
+
+def edit_profile(request):
+    if request.method == 'POST':
+        uid = request.user.id
+        rn = request.POST['rn']
+        dept = request.POST['dept']
+
+        try:
+            sd_new = Student(rollno=rn, department=dept, UserId_id=uid)
+            sd_old = Student.objects.filter(UserId=uid)
+            sd_old.delete()
+            sd_new.save()
+            msg = "Details successfully added!"
+            messages.add_message(request,messages.INFO,msg,extra_tags='adderror')
+        except:
+            errormsg = "Error while adding details"
+            messages.add_message(request,messages.ERROR,errormsg,extra_tags='adderror')
+
+    sd = Student.objects.filter(UserId=request.user.id).values_list('rollno', 'department')
+    return render(request, 'profile.html', {'uid': request.user.id, 'rn': sd[0][0], 'nm': request.user.first_name, 'dept': sd[0][1]})

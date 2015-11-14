@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^cancel_request/', views.can_req_prev, name='cancel request for previledges'),
     url(r'^delete/', views.delete, name='delete course'),
     url(r'^add/', views.add, name='add course'),
+    url(r'^edit_profile/', views.edit_profile, name='Edit profile'),
 ]

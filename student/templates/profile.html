@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div class="container-fluid">
+      <div class="center-block" style="width:500px">        
+        <h3>Welcome, {{nm}}</h3>
+        <div class="alert alert-success text-center" role="alert">
+            {% if messages %}
+                {% for message in messages %}
+                    {{message}}
+                {% endfor %}
+            {% else %}
+            <h5>User details</h5>
+            {% endif %}
+        </div>
+        <div class="container-fluid center-block col-md-9">
+        <form class="col-lg-offset-1" method="POST" action="/student/edit_profile/">
+        {% csrf_token %}
+            <div class="form-inline pull-right">
+                <label for="userid">User ID</label>
+                <input type="text" name="uid" class="form-control" disabled="True" value="{{uid}}">
+            </div>
+            <br/><br/>
+            <div class="form-inline pull-right">
+                <label for="roll">Roll No.</label>
+                <input type="textbox" name="rn" class="form-control" value="{{rn}}">
+            </div>
+            <br/><br/>
+            <div class="form-inline pull-right">
+                <label for="inputPassword">Name</label>
+                <input type="textbox" name="nm" class="form-control" disabled="True" value="{{nm}}">
+            </div>
+            <br/><br/>
+            <div class="form-inline pull-right">
+                <label for="inputPassword">Department</label>
+                <input type="textbox" name="dept" class="form-control" value="{{dept}}">
+            </div>
+            <br/><br/>
+            <button type="submit" class="btn btn-primary col-lg-offset-7">Save</button>
+        </form>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
