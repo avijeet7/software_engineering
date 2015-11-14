@@ -1,14 +1,5 @@
-{# Load the tag library #}
-{% load bootstrap3 %}
-
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-<!--
-{# Display django.contrib.messages as Bootstrap alerts #}
-{% bootstrap_messages %}
--->
 <link rel="shortcut icon" href="http://sstatic.net/stackoverflow/img/favicon.ico">
+<link href="/static/js/bootstrap.min.css" rel="stylesheet" type="text/css">
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,8 +7,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/js/jquery.min.js"></script>
+    <script async type='text/javascript' src="/static/js/bootstrap.min.js"></script>
+    <!--
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    -->
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Course Registration</title>
     <body>
@@ -32,7 +27,7 @@
                 <li class="{% if nbar == 'courselist' %}active{% endif %}"><a href="/course/list/">Courses List</a></li> 
               </ul>
               <ul class="nav navbar-nav pull-right">
-                {% if loggedin == true %}<li><a href="/login/logout/">Logout</a></li>
+                {% if loggedin == true or loggedin == True %}<li><a href="/login/logout/">Logout</a></li>
                 {% else %}<li><a href="/login/">Login</a></li>{% endif %}
               </ul>
             </div>

@@ -3,7 +3,7 @@
 {% block main %}
 
     <div class="container-fluid">
-      <div class="center-block" style="width:800px">        
+      <div class="center-block" style="width:1000px">        
         <h3>Welcome {{user}}</h3>
         {% if mode == "S" %}
             <a href="/student/req_prev/" class="btn btn-primary pull-right" name="req_inst_prev">Request Instructor privilege</a><br/><br/>
@@ -14,7 +14,7 @@
       </div>
     </div>
 
-<div class="center-block text-center" style="width:800px">
+<div class="center-block text-center" style="width:1000px">
 <div class="alert alert-success" role="alert">
 <h3>Current courses, select checkbox drop course</h3>
 </div>
@@ -65,7 +65,7 @@
 </form>
 </div>
 
-<div class="center-block text-center" style="width:800px">
+<div class="center-block text-center" style="width:1000px">
 <div class="alert alert-info" role="alert">
 <h3>Select from all the offered courses</h3>
 </div>
@@ -79,16 +79,18 @@
 <th>Instructor</th>
 <th>Credits</th>
 <th>Type</th>
+<th>Prerequisites</th>
 </tr>
 {% for item in courses %}
 
 <tr>
-    <td><input type="checkbox" name="code" value="{{item.0}}" /></td>
-    <td>{{item.1}}</td>
-    <td>{{item.2}}</td>
-    <td>{{item.3}}</td>
-    <td>{{item.4}}</td>
-    <td>{{item.5}}</td>
+    <td><input type="checkbox" name="code" value="{{item.0.0}}" /></td>
+    <td>{{item.0.1}}</td>
+    <td>{{item.0.2}}</td>
+    <td>{{item.0.3}}</td>
+    <td>{{item.0.4}}</td>
+    <td>{{item.0.5}}</td>
+    <td>{% for element in item.1 %}<span class="label label-primary">{{element}}</span>{{ ' '}}{% endfor %}</td>
 </tr>
 {% endfor %}
 

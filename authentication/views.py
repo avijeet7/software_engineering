@@ -25,7 +25,7 @@ def auth_login(request):
             # the authentication system was unable to verify the username and password
             print("The username and password were incorrect.")
 
-    return render(request, 'login.html')
+    return render(request, 'login.html', {'nbar': 'home', 'loggedin': False})
 
 def auth_logout(request):
     logout(request)

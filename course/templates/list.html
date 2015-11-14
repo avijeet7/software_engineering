@@ -6,13 +6,19 @@
 <div class="center-block text-center" style="width:500px">
 <h3>List of all the courses:</h3>
 <table class="table">
+<tr>
+<th>Code</th><th>Course Name</th><th>Credits</th><th>Prerequisites</th>
+</tr>
 {% for item in data %}
 <tr>
-<td>{{item.0}}</td><td>{{item.1}}</td><td>{{item.2}}</td>
+<td>{{item.0.0}}</td><td>{{item.0.1}}</td><td>{{item.0.2}}</td>
+<td>{% for elem in item.1 %}<span class="label label-primary">{{elem.0}}</span>{{' '}}{% endfor %}</td>
 </tr>
 {% endfor %}
 </table>
+<a href="/graph/" class="btn btn-danger" role="button">Course Graph</a>
 </div>
 </div>
+
 
 {% endblock %}

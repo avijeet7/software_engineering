@@ -8,7 +8,6 @@ def index(request):
     try:
         user = request.user
         request.session['mode'] = UserType.objects.get(UserId_id=user.id).Type
-        print "asd"
         if request.session['mode'] == 'R':
             loggedin = True
             return redirect('/registrar/')

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from student.models import StudentCourses
-from student.models import Catalog
+from course.models import Catalog, Prerequisites
 from authentication.models import UserType
 from registrar.models import Constraints
 from django.contrib import messages
@@ -25,16 +25,20 @@ def view(request):
         d.append(item.courseid.instructor)
         d.append(item.courseid.credits)
         d.append(item.courseid.coursetag)
+        d.append(Prerequisites.objects.filter(cid=item.courseid.id).values_list('prereq', flat=True))
         d1.append(d)
     codelist = StudentCourses.objects.filter(UserId=request.user.id).values_list('UserId', 'courseid')
     for item in codelist:
         codelistid.append(int(item[1]))
     courses = Catalog.objects.exclude(id__in = codelistid).values_list('id','code','name','instructor','credits','coursetag')
+    coursedata = []
+    for i, elem in enumerate(courses):
+        coursedata.append([elem, Prerequisites.objects.filter(cid=elem[0]).values_list('prereq', flat=True)])
     min_credits = Constraints.objects.get().min_credits
     if (total_credits_registered<min_credits):
         messages.add_message(request,messages.INFO,"Minimum number of credits needed are "+str(min_credits),extra_tags='viewerror')
 
-    return render(request, 'StudentView.html', {'user': request.user.first_name, 'data': d1, 'courses':courses, 'mode': request.session['mode']})
+    return render(request, 'StudentView.html', {'user': request.user.first_name, 'data': d1, 'courses':coursedata, 'mode': request.session['mode'], 'nbar': 'home'})
 
 def delete(request):
     credits_to_delete = 0

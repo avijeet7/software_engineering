@@ -18,17 +18,17 @@ def index(request):
         course.save()
         return HttpResponseRedirect(reverse("instructor.views.index"))
 
-    courses = Catalog.objects.filter(instructor = request.user.first_name).values_list('id','code','name','instructor','credits','coursetag','prereq')
-    coursesoffered = []
-    for n, course in enumerate(courses):
-        if not course[6]:
-            z = tuple("None" if x == '' else x for x in course)
-            coursesoffered.append(z)
-        else:
-            z = tuple(x for x in course)
-            coursesoffered.append(z)
+    courses = Catalog.objects.filter(instructor = request.user.first_name).values_list('id','code','name','instructor','credits','coursetag')
+    # coursesoffered = []
+    # for n, course in enumerate(courses):
+    #     if not course[6]:
+    #         z = tuple("None" if x == '' else x for x in course)
+    #         coursesoffered.append(z)
+    #     else:
+    #         z = tuple(x for x in course)
+    #         coursesoffered.append(z)
     studentlist = []
-    for course in coursesoffered:
+    for course in courses:
         waiting_students = StudentCourses.objects.filter(courseid = course[0],enroll_limit_status_inst="W").values_list('UserId')
         waiting_students = [ int(x[0]) for x in waiting_students ]
         confirmed_students = StudentCourses.objects.filter(courseid = course[0],enroll_limit_status_inst="C").values_list('UserId')
@@ -46,4 +46,4 @@ def index(request):
         
         studentlist.append([str(code[0][0]),confirmed_studentinfo,waiting_studentinfo])
         print studentlist
-    return render(request, 'InstructorView.html', {'user': request.user.first_name, 'courses':coursesoffered,'studentlist':studentlist})
+    return render(request, 'InstructorView.html', {'user': request.user.first_name, 'courses': courses,'studentlist':studentlist})

@@ -19,6 +19,8 @@ class Migration(migrations.Migration):
                 ('instructor', models.CharField(max_length=40)),
                 ('credits', models.SmallIntegerField(default=0)),
                 ('coursetag', models.CharField(default=b'C', max_length=1)),
+                ('prereq', models.CharField(default=b'', max_length=100)),
+                ('max_enroll_limit', models.IntegerField(default=0)),
             ],
         ),
     ]

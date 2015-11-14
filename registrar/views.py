@@ -14,7 +14,7 @@ def index(request):
         p_user = User.objects.filter(id = i).values_list('id','username','first_name','email')
         pending_user.append(p_user)
 
-    return render(request, 'RegistrarView.html', {'username': username,'pending_user':pending_user})
+    return render(request, 'RegistrarView.html', {'username': username,'pending_user':pending_user, 'nbar': 'home'})
 
 def add_inst(request):
     #userdetails = UserType.objects.get(UserId=request.user.id)

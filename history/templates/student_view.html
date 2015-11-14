@@ -1,1 +1,22 @@
-{{ data }}
+{% extends 'base.html' %}
+
+{% block main %}
+
+
+<div class="center-block text-center" style="width:1000px">
+
+<table class="table table-bordered">
+<tr>
+	<th>Roll no.</th><th>Courses Taken</th>
+</tr>
+{% for item in data %}
+<tr>
+	<td>{{ item.0 }}</td>
+	<td>{% for element in item.1 %}<span class="label label-primary">{{element}}</span>{{ ' '}}{% endfor %}</td>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+
+{% endblock %}
