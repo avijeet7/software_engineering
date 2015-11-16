@@ -190,5 +190,8 @@ def edit_profile(request):
             errormsg = "Error while adding details"
             messages.add_message(request,messages.ERROR,errormsg,extra_tags='adderror')
 
-    sd = Student.objects.filter(UserId=request.user.id).values_list('rollno', 'department')
-    return render(request, 'profile.html', {'uid': request.user.id, 'rn': sd[0][0], 'nm': request.user.first_name, 'dept': sd[0][1]})
+    try:
+        sd = Student.objects.filter(UserId=request.user.id).values_list('rollno', 'department')
+        return render(request, 'profile.html', {'uid': request.user.id, 'rn': sd[0][0], 'nm': request.user.first_name, 'dept': sd[0][1]})
+    except:
+        return render(request, 'profile.html', {'uid': request.user.id, 'nm': request.user.first_name})
