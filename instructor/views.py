@@ -1,22 +1,25 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from student.models import StudentCourses
-from course.models import Catalog
+from course.models import Catalog, Prerequisites
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+
 def index(request):
 
-    if request.method == 'POST':
-        code = request.POST['code']
-        name = request.POST['name']
-        instructor = request.user.first_name
-        credits = request.POST['credits']
-        coursetag = request.POST['type']
-        max_enroll_limit = request.POST['max_enroll_limit']
-
-        course = Catalog(code=code, name=name, instructor=instructor, credits=credits, coursetag=coursetag,max_enroll_limit=max_enroll_limit)
-        course.save()
-        return HttpResponseRedirect(reverse("instructor.views.index"))
+    """Display the course list {data}"""
+    data = Catalog.objects.filter(instructor = request.user.first_name)
+    d1 = []    
+    for item in data:
+        d = []
+        d.append(item.id)
+        d.append(item.code)
+        d.append(item.name)
+        d.append(item.instructor)
+        d.append(item.credits)
+        d.append(item.coursetag)
+        d.append(Prerequisites.objects.filter(cid=item.id).values_list('prereq', flat=True))
+        d1.append(d)
+    print d1
 
     courses = Catalog.objects.filter(instructor = request.user.first_name).values_list('id','code','name','instructor','credits','coursetag')
     # coursesoffered = []
@@ -45,5 +48,35 @@ def index(request):
             confirmed_studentinfo.append(User.objects.filter(id = studentid).values_list('id','username','first_name','email')[0])
         
         studentlist.append([str(code[0][0]),confirmed_studentinfo,waiting_studentinfo])
-        print studentlist
-    return render(request, 'InstructorView.html', {'user': request.user.first_name, 'courses': courses,'studentlist':studentlist})
+        # print studentlist
+    return render(request, 'InstructorView.html', {'user': request.user.first_name, 'courses': d1,'studentlist':studentlist})
+
+def add_course(request):
+    if request.method == 'POST':
+        code = request.POST['code']
+        name = request.POST['name']
+        instructor = request.user.first_name
+        credits = request.POST['credits']
+        coursetag = request.POST['type']
+        max_enroll_limit = request.POST['max_enroll_limit']
+
+        course = Catalog(code=code, name=name, instructor=instructor, credits=credits, coursetag=coursetag,max_enroll_limit=max_enroll_limit)
+        course.save()
+
+    return redirect('/instructor/')
+
+def add_prereq(request):
+
+    if request.method == 'POST':
+        try:
+            ccode = request.POST['ccode']
+            cid = ccode.split('(', 1)[1].split(')')[0]
+            prereq = request.POST['prereq'].split(',')
+            for item in prereq:
+                pr = Prerequisites(cid_id=cid, prereq=item.strip())
+                pr.save()
+        except Exception as e:
+            print type(e)
+        
+
+    return redirect('/instructor/')

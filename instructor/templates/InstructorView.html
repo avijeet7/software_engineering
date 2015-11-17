@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 
 {% block main %}
- <div class="container-fluid">
-      <div class="center-block" style="width:800px">
-        <a href="/login/logout/" class="btn btn-warning pull-right hide" name="logout">Logout</a>
-        <h3>Welcome Prof. {{user}}</h3>
-      </div>
-    </div>
+<table class="center-block">
+<tr><td>
+<h3>Welcome Prof. {{user}}</h3>
+
 <div class="center-block text-center" style="width:400px">
-<form enctype="multipart/form-data" method="POST" action="/instructor/" class="form-group">
+<form enctype="multipart/form-data" method="POST" action="/instructor/add_course/" class="form-group">
     {% csrf_token %}
     <table class="table">
     <tr><td>Code </td><td><input type="text" class="form-control" name="code" value="" placeholder="Code" /></td></tr>
@@ -20,7 +18,33 @@
     <input class="btn btn-primary" type="Submit" value="Add course">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </form>
 </div>
+</td>
 
+<td>
+<div class="jumbotron center-block text-center" style="width:400px">
+<h3>Add Prerequisites</h3><br/>
+<form class="form-inline" role="form" method="POST" action="/instructor/add_prereq/">
+    {% csrf_token %}Course
+    <div class="form-group ">
+        <select class="form-control" name='ccode'>
+            {% for item in courses %}
+                <option>({{ item.0 }}) {{ item.1 }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <br/><br/>
+    Prerequisites
+    <div class="form-group">
+        <input class="form-control" name="prereq" style="width:100px">
+    </div><br/><br/>
+    <button type="submit" class="btn btn-primary">
+        Add
+    </button>
+</form>
+</div>
+</td>
+</tr>
+</table>
 <div class="center-block text-center" style="width:900px">
 <div class="alert alert-info" role="alert">
 <h3>Courses offered by you in current semester</h3>
@@ -34,15 +58,16 @@
 <th>Instructor</th>
 <th>Credits</th>
 <th>Type</th>
+<th>Prerequisites</th>
 </tr>
 {% for item in courses %}
-
 <tr>
     <td>{{item.1}}</td>
     <td>{{item.2}}</td>
     <td>{{item.3}}</td>
     <td>{{item.4}}</td>
     <td>{{item.5}}</td>
+    <td>{% for elem in item.6 %}<span class="label label-primary">{{elem}}</span>{{ ' '}}{% endfor %}</td>
 </tr>
 {% endfor %}
 </table>
