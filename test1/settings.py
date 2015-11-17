@@ -96,7 +96,7 @@ DATABASES = {
         'NAME': 'seproj2',
         #'NAME': 'test-pp',
         'USER': 'root',
-        'PASSWORD': 'root123',
+        'PASSWORD': 'imran',
         'HOST': 'localhost',
         'PORT': '80',
     }

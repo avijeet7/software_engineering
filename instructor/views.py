@@ -33,7 +33,7 @@ def index(request):
     #         coursesoffered.append(z)
     studentlist = []
     for course in courses:
-        waiting_students = StudentCourses.objects.filter(courseid = course[0],enroll_limit_status_inst="W").values_list('UserId')
+        waiting_students = StudentCourses.objects.filter(courseid = course[0],enroll_limit_status_inst="W",enroll_limit_status_reg="A").values_list('UserId')
         waiting_students = [ int(x[0]) for x in waiting_students ]
         confirmed_students = StudentCourses.objects.filter(courseid = course[0],enroll_limit_status_inst="C").values_list('UserId')
         confirmed_students = [ int(x[0]) for x in confirmed_students ]
@@ -76,6 +76,7 @@ def add_prereq(request):
             for item in prereq:
                 pr = Prerequisites(cid_id=cid, prereq=item.strip())
                 pr.save()
+
         except Exception as e:
             print type(e)
         

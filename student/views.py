@@ -48,6 +48,7 @@ def delete(request):
     enroll_limit_status_reg = ""
     enroll_limit_status_inst = ""
     max_enroll_inst = 0
+    max_enroll_reg = 0
     min_credits = Constraints.objects.get().min_credits
 
     rcodelist = request.POST.getlist('code')
@@ -62,6 +63,7 @@ def delete(request):
         for item in rcodelist:
             id1 = Catalog.objects.get(code=item).id
             max_enroll_inst = Catalog.objects.get(id=id1).max_enroll_limit
+            max_enroll_reg = Constraints.objects.get().max_enroll_limit_reg
 
             number_of_course_reg = StudentCourses.objects.filter(courseid_id=id1).count()
             myobj = StudentCourses.objects.filter(UserId=request.user.id,courseid_id=id1).values_list('UserId','courseid','enroll_limit_status_inst','enroll_limit_status_reg')
@@ -72,9 +74,24 @@ def delete(request):
                 if (number_of_course_reg > max_enroll_inst): 
                     list_of_waiting_students = StudentCourses.objects.filter(courseid_id=id1,enroll_limit_status_inst="W")[:1].get()
                     list_of_waiting_students.enroll_limit_status_inst = "C"
-                    print "new" , list_of_waiting_students
+                    list_of_waiting_students.enroll_limit_status_reg = "A"
+                    #print "new" , list_of_waiting_students
                     list_of_waiting_students.save()
-                
+                if (number_of_course_reg > max_enroll_reg): 
+                        list_of_waiting_students = StudentCourses.objects.filter(courseid_id=id1,enroll_limit_status_inst="W",enroll_limit_status_reg="NA")[:1].get()
+                        list_of_waiting_students.enroll_limit_status_inst = "W"
+                        list_of_waiting_students.enroll_limit_status_reg = "A"
+                        list_of_waiting_students.save()
+
+
+            if str(myobj[0][2]) == "W":    
+                if str(myobj[0][3]) == "A":
+                    if (number_of_course_reg > max_enroll_reg): 
+                        list_of_waiting_students = StudentCourses.objects.filter(courseid_id=id1,enroll_limit_status_inst="W",enroll_limit_status_reg="NA")[:1].get()
+                        list_of_waiting_students.enroll_limit_status_inst = "W"
+                        list_of_waiting_students.enroll_limit_status_reg = "A"
+                        list_of_waiting_students.save()
+
             obj = StudentCourses.objects.get(courseid=id1, UserId=request.user.id)
             obj.delete()
             success = 1
