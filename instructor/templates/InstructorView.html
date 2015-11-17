@@ -76,7 +76,7 @@
 {% for course in studentlist %}
 <div class="center-block text-center" style="width:900px">
 <div class="alert alert-info" role="alert">
-<h3>Student who have registered for course {{course.0}} in current semester(Confirmed list)</h3>
+<h3>Student who have registered for course {{course.0}} in current semester</h3>
 </div>
 </div>
 
@@ -91,16 +91,26 @@
 
 {% for item in course.1 %}
 <tr>
-    <td>{{forloop.counter}}</td>
-    <td>{{item.1}}</td>
-    <td>{{item.2}}</td>
-    <td>{{item.3}}</td>
+    <td><p class="text-success">{{forloop.counter}}</p></td>
+    <td><p class="text-success">{{item.1}}</p></td>
+    <td><p class="text-success">{{item.2}}</p></td>
+    <td><p class="text-success">{{item.3}}</p></td>
 </tr>
 {% endfor %}
+
+{% for item in course.2 %}
+<tr>
+    <td><p class="text-danger">{{forloop.counter}}</p></td>
+    <td><p class="text-danger">{{item.1}}</p></td>
+    <td><p class="text-danger">{{item.2}}</p></td>
+    <td><p class="text-danger">{{item.3}}</p></td>
+</tr>
+{% endfor %}
+
 </table>
 </div>
 
-<div class="center-block text-center" style="width:900px">
+<!--<div class="center-block text-center" style="width:900px">
 <div class="alert alert-info" role="alert">
 <h3>Student who have registered for course {{course.0}} in current semester(Waiting list)</h3>
 </div>
@@ -115,15 +125,15 @@
 </tr>
 {% for item in course.2 %}
 <tr>
-    <td>{{forloop.counter}}</td>
-    <td>{{item.1}}</td>
-    <td>{{item.2}}</td>
-    <td>{{item.3}}</td>
+    <td><p class="text-danger">{{forloop.counter}}</p></td>
+    <td><p class="text-danger">{{item.1}}</p></td>
+    <td><p class="text-danger">{{item.2}}</p></td>
+    <td><p class="text-danger">{{item.3}}</p></td>
 </tr>
 {% endfor %}
 </table>
 </div>
-
+-->
 
 {% endfor %}
 {% endblock %}
