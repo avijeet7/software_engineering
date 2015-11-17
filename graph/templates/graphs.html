@@ -8,7 +8,7 @@
   <canvas id="viewport" width="800" height="550"></canvas>
   </td>
   <td valign="top">
-  <div class="jumbotron" id="textport" width="20" height="1200">ASD</div>
+  <div class="jumbotron" id="textport" width="20" height="1200">Course Name</div>
   </td>
   </tr>
   </table>
@@ -196,7 +196,7 @@
         success: function(data) {
             console.log(data)
             $.each(data[0], function(index, value) {
-                sys.addNode(value[1], {label: value[1], color: 'grey'})
+                sys.addNode(value[1], {label: value[1], color: 'grey', name: value[2]})
             });
             $.each(data[1], function(index, item) {
                 sys.addEdge(item[0], item[1], {weight: 1, color: 'brown', directed:true})

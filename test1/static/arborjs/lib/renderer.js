@@ -136,9 +136,9 @@
 
             if (oldSelected !== null) oldSelected.node.data.color = 'grey'
             oldSelected = selected
-            console.log(selected.node)
+            console.log(selected)
             selected.node.data.color = 'green'
-            document.getElementById("textport").innerHTML = selected.node.name + ": " + selected.node.data.label
+            document.getElementById("textport").innerHTML = selected.node.data.label + ": " + selected.node.data.name
 
             if (dragged.node !== null) dragged.node.fixed = true
 

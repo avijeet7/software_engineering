@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 
 @api_view(http_method_names=['GET'])
 def graph_data(request):
-    courses = Catalog.objects.all().values_list('id', 'code')
+    courses = Catalog.objects.all().values_list('id', 'code', 'name')
     
     prereq = Prerequisites.objects.all().values_list('cid', 'prereq')
 
