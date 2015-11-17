@@ -18,6 +18,7 @@ def index(request):
         d.append(item.credits)
         d.append(item.coursetag)
         d.append(Prerequisites.objects.filter(cid=item.id).values_list('prereq', flat=True))
+        d.append(item.max_enroll_limit)
         d1.append(d)
     print d1
 

@@ -59,6 +59,7 @@
 <th>Credits</th>
 <th>Type</th>
 <th>Prerequisites</th>
+<th>En.lt.</th>
 </tr>
 {% for item in courses %}
 <tr>
@@ -68,6 +69,7 @@
     <td>{{item.4}}</td>
     <td>{{item.5}}</td>
     <td>{% for elem in item.6 %}<span class="label label-primary">{{elem}}</span>{{ ' '}}{% endfor %}</td>
+    <td>{{item.7}}</td>
 </tr>
 {% endfor %}
 </table>
