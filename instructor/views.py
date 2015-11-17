@@ -20,7 +20,7 @@ def index(request):
         d.append(Prerequisites.objects.filter(cid=item.id).values_list('prereq', flat=True))
         d.append(item.max_enroll_limit)
         d1.append(d)
-    print d1
+    #print d1
 
     courses = Catalog.objects.filter(instructor = request.user.first_name).values_list('id','code','name','instructor','credits','coursetag')
     # coursesoffered = []
@@ -37,7 +37,11 @@ def index(request):
         waiting_students = [ int(x[0]) for x in waiting_students ]
         confirmed_students = StudentCourses.objects.filter(courseid = course[0],enroll_limit_status_inst="C").values_list('UserId')
         confirmed_students = [ int(x[0]) for x in confirmed_students ]
-        
+        waiting_institute_students = StudentCourses.objects.filter(courseid = course[0],enroll_limit_status_inst="W",enroll_limit_status_reg="NA").values_list('UserId')
+        waiting_institute_students = [ int(x[0]) for x in waiting_institute_students ]
+        print waiting_institute_students
+
+
         code = Catalog.objects.filter(id = course[0]).values_list('code')
 
         waiting_studentinfo = []
@@ -47,8 +51,13 @@ def index(request):
         confirmed_studentinfo = []
         for studentid in confirmed_students:
             confirmed_studentinfo.append(User.objects.filter(id = studentid).values_list('id','username','first_name','email')[0])
+
+        waiting_NA_studentinfo = []
+        for studentid in waiting_institute_students:
+            waiting_NA_studentinfo.append(User.objects.filter(id = studentid).values_list('id','username','first_name','email')[0])
+
         
-        studentlist.append([str(code[0][0]),confirmed_studentinfo,waiting_studentinfo])
+        studentlist.append([str(code[0][0]),confirmed_studentinfo,waiting_studentinfo,waiting_NA_studentinfo])
         # print studentlist
     return render(request, 'InstructorView.html', {'user': request.user.first_name, 'courses': d1,'studentlist':studentlist})
 
